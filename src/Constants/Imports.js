@@ -1,0 +1,1 @@
+export const ImgLogo = require('../Assets/HealthyMindLogo.png')

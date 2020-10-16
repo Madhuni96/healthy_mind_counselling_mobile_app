@@ -1,0 +1,42 @@
+import React, { useEffect } from 'react'
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import SplashScreen from 'react-native-splash-screen'
+import HomeScreen from "./Screens/Home";
+import SignUpScreen from './Screens/SignUp'
+import SignInScreen from "./Screens/SignIn";
+import NoInternet from "./Components/Common/NoInternet";
+
+const Stack = createStackNavigator();
+
+function NavigationStack(){
+    return(
+        <Stack.Navigator initialRouteName = "Home" screenOptions={{
+                headerShown: false,
+            }}>
+            
+            <Stack.Screen
+            name = "Home" component = {HomeScreen}/>
+            <Stack.Screen
+            name = "SignUp" component = {SignUpScreen}/>
+            <Stack.Screen
+            name = "SignIn" component = {SignInScreen}/>
+        </Stack.Navigator>
+    )
+}
+
+function App() {
+
+useEffect(()=>{
+    SplashScreen.hide();
+},[]);
+
+    return (
+        <NavigationContainer>    
+            <NavigationStack/>
+            <NoInternet/>
+        </NavigationContainer>
+    )
+}
+
+export default App
