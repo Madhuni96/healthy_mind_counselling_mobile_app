@@ -1,5 +1,6 @@
 export const colWhite = '#FFFFFF';
 export const colBlack = '#000000';
+export const colBlue = '#483cf0';
 export const colYellowMain = '#FFCC00';
 export const colYellowLight = '#FFDA47';
 export const colYellowDark = '#CCA300';

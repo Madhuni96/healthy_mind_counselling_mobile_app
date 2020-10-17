@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen'
@@ -11,7 +12,7 @@ const Stack = createStackNavigator();
 
 function NavigationStack(){
     return(
-        <Stack.Navigator initialRouteName = "Home" screenOptions={{
+        <Stack.Navigator initialRouteName = "SignIn" screenOptions={{
                 headerShown: false,
             }}>
             
@@ -32,7 +33,8 @@ useEffect(()=>{
 },[]);
 
     return (
-        <NavigationContainer>    
+        <NavigationContainer>  
+            <StatusBar translucent={true} backgroundColor='transparent' />  
             <NavigationStack/>
             <NoInternet/>
         </NavigationContainer>

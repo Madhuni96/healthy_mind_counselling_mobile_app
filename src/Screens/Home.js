@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, Image, Text } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React from 'react'
+import { View, StyleSheet, Image } from 'react-native'
 import { colYellowPink } from "../Constants/Colors";
 import { ImgLogo } from '../Constants/Imports';
 import { WIDTH } from "../Constants/Sizes";
