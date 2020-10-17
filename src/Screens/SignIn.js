@@ -5,18 +5,18 @@ import { colYellowLight, colYellowPink } from "../Constants/Colors";
 import { ImgLogo } from '../Constants/Imports';
 import { WIDTH } from "../Constants/Sizes";
 import SignInComponents from '../Components/SignIn/SignInComponents'
-import Header from '../Components/Common/Header'
+import SignInHeader from '../Components/SignIn/SignInHeader'
 
 function SignIn() {
     return (
         <LinearGradient
-            colors={['rgba(255, 204, 0,0.2)', 'rgba(255, 204, 0,1)']}
+            colors={['rgba(255, 187, 0,0)', 'rgba(255, 204, 0,1)']}
                 style={styles.container}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}>
             <View style={styles.contentContainer}>
                 <View style={styles.menuHeaderContainer}>
-                    <Header/>
+                    <SignInHeader/>
                 </View>
                 <View style={styles.inputsView}>
                     <SignInComponents/>
@@ -43,11 +43,6 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowRadius: 0.5,
         shadowOpacity: 0.5,
-    },
-    StatusBar: {
-        backgroundColor: colYellowPink,
-        height: WIDTH(15),
-        flexDirection: 'row'
     },
     ImageLogo:{
         height:WIDTH(15),
