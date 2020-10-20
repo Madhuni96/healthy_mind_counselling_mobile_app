@@ -11,16 +11,18 @@ import { WIDTH } from "../../Constants/Sizes";
 
 function SignUpComponents() {
 
+    const navigation = useNavigation();
+
     const [gender,setGender] = useState('Male');
     const [type,setType] = useState('Patient');
     const [imgData,setImgData] = useState('')
 
-var radio_gender = [
-    {label:'Male',value:0},
-    {label:'Female',value:1}]
-var radio_type = [
-    {label:'Patient',value:0},
-    {label:'Counsellor',value:1}]
+    var radio_gender = [
+        {label:'Male',value:0},
+        {label:'Female',value:1}]
+    var radio_type = [
+        {label:'Patient',value:0},
+        {label:'Counsellor',value:1}]
 
     const genderFunction = (value) =>{
         if(value === 0){
@@ -219,7 +221,7 @@ var radio_type = [
                     placeholder="Enter Confirm Password"/>
             </View>
             <View style={{alignSelf:'center'}}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('SignUp')}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
                         <View style={styles.buttonStyle}>
                             <Text style={styles.buttonText}>Sign Up</Text>
                             </View>
@@ -289,34 +291,35 @@ const styles = StyleSheet.create({
         fontSize:WIDTH(4.5)
     },
     ImageSections: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    justifyContent: 'center',
-  },
-  images: {
-    width: 150,
-    height: 150,
-    borderColor: 'black',
-    borderWidth: 1,
-    marginHorizontal: 3,
-  },
-  btnParentSection: {
-    alignItems: 'center',
-    justifyContent:'center',
-    margin:WIDTH(1),
-    flexDirection:'row'
-  },
-  btnSection: {
-    width: 225,
-    height: 50,
-    backgroundColor: '#DCDCDC',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 3,
-    marginBottom: 10,
-  },
+      display: 'flex',
+      flexDirection: 'row',
+      paddingHorizontal: 8,
+      paddingVertical: 8,
+      justifyContent: 'center',
+    },
+    images: {
+      width: 150,
+      height: 150,
+      borderColor: 'black',
+      borderWidth: 1,
+      borderRadius:150/2,
+      marginHorizontal: 3,
+    },
+    btnParentSection: {
+      alignItems: 'center',
+      justifyContent:'center',
+      margin:WIDTH(1),
+      flexDirection:'row'
+    },
+    btnSection: {
+      width: 225,
+      height: 50,
+      backgroundColor: '#DCDCDC',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 3,
+      marginBottom: 10,
+    },
 })
 
 export default SignUpComponents

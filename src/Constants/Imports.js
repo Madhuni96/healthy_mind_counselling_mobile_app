@@ -1,5 +1,7 @@
 export const ImgLogo = require('../Assets/images/Logo.png')
 export const ImgFeatured = require('../Assets/images/Featured.png')
+export const ImgQuiz = require('../Assets/images/quiz.png')
+export const ImgChat = require('../Assets/images/chat.png')
 
 export const UserIcon = require('../Assets/icons/userIcon.png')
 export const PwIcon = require('../Assets/icons/pwIcon.png')
@@ -10,3 +12,4 @@ export const PhoneIcon = require('../Assets/icons/phoneIcon.png')
 export const ImgIcon = require('../Assets/icons/imgIcon.png')
 export const CameraIcon = require('../Assets/icons/cameraIcon.png')
 export const GalleryIcon = require('../Assets/icons/galleryIcon.png')
+export const QuesMarkIcon = require('../Assets/icons/quesMarkIcon.png')

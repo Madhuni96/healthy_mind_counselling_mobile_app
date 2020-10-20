@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, StyleSheet, Image, Text, Button} from 'react-native'
-import { TextInput, TouchableNativeFeedback, TouchableOpacity } from 'react-native-gesture-handler';
+import { View, StyleSheet, Image, Text } from 'react-native'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { UserIcon, PwIcon } from '../../Constants/Imports';
 import { colBlack, colBlue, colYellowMain } from '../../Constants/Colors'
@@ -31,13 +31,13 @@ const navigation = useNavigation();
                     placeholder="Enter Password"/>
             </View>
             <View style={{alignSelf:'flex-end'}}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('SignUp')}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('ForgotPassword')}}>
                     <Text style={styles.forgotText}>forgot password?</Text>
                 </TouchableOpacity>
             </View>
                 
             <View style={{alignSelf:'center'}}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('SignUp')}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
                         <View style={styles.buttonStyle}>
                             <Text style={styles.buttonText}>SignIn</Text>
                             </View>
