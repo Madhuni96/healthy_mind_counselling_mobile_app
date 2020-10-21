@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Text, Image } from 'react-native'
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, Image } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -18,47 +18,37 @@ function ForgotPassword() {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}>
                 <StatusBarCom/>
-                <Text style={styles.titleText}>Forgot Password</Text>
-                <View style={{alignSelf:'center'}}>
-                    <TouchableOpacity onPress={()=>{navigation.goBack()}}>
-                            <View style={styles.buttonStyle}>
-                                <Text style={styles.buttonText}>Send Verification Code</Text>
-                                </View>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.inputsView}>
-                    <Image
-                        source={PwIcon}
-                        style={styles.icon}/>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Enter Verification Code"/>
-                </View>
-                <View style={styles.inputsView}>
-                    <Image
-                        source={PwIcon}
-                        style={styles.icon}/>
-                    <TextInput
-                        style={styles.input}
-                        textContentType='password'
-                        placeholder="Enter New Password"/>
-                </View>
-                <View style={styles.inputsView}>
-                    <Image
-                        source={PwIcon}
-                        style={styles.icon}/>
-                    <TextInput
-                        style={styles.input}
-                        textContentType='password'
-                        placeholder="Enter Confirm Password"/>
-                </View>
-                <View style={{alignSelf:'center'}}>
-                    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
-                            <View style={styles.buttonStyle}>
-                                <Text style={styles.buttonText}>Change Password</Text>
-                                </View>
-                    </TouchableOpacity>
-                </View>
+                <SafeAreaView style={styles.container}>
+                    <ScrollView style={styles.scrollView}>
+                        <Text style={styles.titleText}>Forgot Password</Text>
+                        <View style={{alignSelf:'center'}}>
+                            <TouchableOpacity onPress={()=>{navigation.goBack()}}>
+                                    <View style={styles.buttonStyle}>
+                                        <Text style={styles.buttonText}>Send Verification Code</Text>
+                                        </View>
+                            </TouchableOpacity>
+                        </View>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter Verification Code"/>
+                        <TextInput
+                            style={styles.input}
+                            textContentType='password'
+                            placeholder="Enter New Password"/>
+                        <TextInput
+                            style={styles.input}
+                            textContentType='password'
+                            placeholder="Enter Confirm Password"/>
+                        <View style={{alignSelf:'center'}}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
+                                    <View style={styles.buttonStyle}>
+                                        <Text style={styles.buttonText}>Change Password</Text>
+                                        </View>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </SafeAreaView>
+                
         </LinearGradient>
     )
 }
@@ -66,6 +56,9 @@ function ForgotPassword() {
 const styles = StyleSheet.create({
     container:{
         flex:1,
+    },
+    scrollView:{
+        marginHorizontal: 20,
     },
     titleText:{
         alignSelf:'center',

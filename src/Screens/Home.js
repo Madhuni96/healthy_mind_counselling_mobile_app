@@ -33,34 +33,15 @@ function Home() {
                 BackHandler.exitApp();
             }
             else {
-                Alert.alert(
-                    'Alert',
-                    'Do you really want to Sign Out?',
-                    [
-                        {
-                            text: 'No',
-                            style: 'cancel',
-                            onPress:()=>{setExitApp(true)
-                                ToastAndroid.show(
-                                    'Press again to exit',
-                                    ToastAndroid.BOTTOM,
-                                    ToastAndroid.SHORT,
-                                    ToastAndroid.CENTER
-                                )}
-                        },
-                        { 
-                            text: 'Yes', 
-                            onPress: () => navigation.navigate('SignIn') }
-                    ],
-                { cancelable: false }
-        );
-
-                
+               setExitApp(true)
+                ToastAndroid.show(
+                    'Press again to exit',
+                    ToastAndroid.BOTTOM,
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER
+                )
             }
-
-            setTimeout(() => {
-                setExitApp(false);
-            }, 1500);
+                        
         }
         return true;
     }
@@ -83,12 +64,18 @@ function Home() {
             end={{ x: 1, y: 0 }}>
             <View style={styles.contentContainer}>
                 <StatusBarCom/>
-                <TouchableOpacity style={{flexDirection:'row',alignSelf:'flex-end'}} onPress={()=>onOpenProfileModal()}>
-                    <Image source={ImgIcon} style={styles.ImageView}/>
-                    <Text style={styles.text}>Madhuni</Text>
-                </TouchableOpacity>
+                <View style={{alignSelf:'flex-end'}}>
+                    <TouchableOpacity onPress={()=>onOpenProfileModal()}>
+                        <Image source={ImgIcon} style={styles.ImageView}/>
+                        <Text style={styles.text}>Madhuni</Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.contentView}>
-                    <View style={styles.imgView}><Image source={ImgQuiz} style={styles.image}/></View>
+                    <View style={styles.imgView}>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Quiz')}>
+                            <Image source={ImgQuiz} style={styles.image}/>
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.imgView}><Image source={ImgChat} style={styles.image}/></View>
                 </View>
             </View>
@@ -123,15 +110,15 @@ const styles = StyleSheet.create({
         resizeMode:'center',
         alignSelf:'center'
     },
-        ImageView:{
+    ImageView:{
         height:50,
         width:50,
         borderRadius:50/2,
-        alignSelf:'flex-end'
+        alignSelf:'flex-end',
+        margin:WIDTH(3)
     },
     text:{
         alignSelf:'center',
-        margin:WIDTH(2)
     }
 })
 

@@ -7,8 +7,10 @@ import HomeScreen from "./Screens/Home";
 import SignUpScreen from './Screens/SignUp'
 import SignInScreen from "./Screens/SignIn";
 import NoInternet from "./Components/Common/NoInternet";
-import ChangePassword from './Components/Common/ChangePassword';
-import ForgotPassword from './Components/Common/ForgotPassword';
+import QuizScreen from './Screens/Quiz'
+import RecommendationScreen from './Screens/Recommendation'
+import ChangePasswordScreen from './Components/Common/ChangePassword';
+import ForgotPasswordScreen from './Components/Common/ForgotPassword';
 
 const Stack = createStackNavigator();
 
@@ -25,9 +27,13 @@ function NavigationStack(){
             <Stack.Screen
                 name = "SignIn" component = {SignInScreen}/>
             <Stack.Screen
-                name = "ChangePassword" component = {ChangePassword}/>
+                name = "Quiz" component = {QuizScreen}/>
             <Stack.Screen
-                name = "ForgotPassword" component = {ForgotPassword}/>
+                name = "Recommendation" component = {RecommendationScreen}/>
+            <Stack.Screen
+                name = "ChangePassword" component = {ChangePasswordScreen}/>
+            <Stack.Screen
+                name = "ForgotPassword" component = {ForgotPasswordScreen}/>
         </Stack.Navigator>
     )
 }

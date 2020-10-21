@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Alert, Text, Image, ToastAndroid, BackHandler } from 'react-native'
+import { View, StyleSheet, Alert, Text, Image, SafeAreaView, ScrollView } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -27,38 +27,42 @@ function ChangePassword() {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}>
                 <StatusBarCom/>
-                <Text style={styles.titleText}>Change Password</Text>
-            <View style={styles.inputsView}>
-                <Image
-                    source={PwIcon}
-                    style={styles.icon}/>
-                <TextInput
-                    style={styles.input}
-                    textContentType='password'
-                    placeholder="Enter Current Password"/>
-            </View>
-            <View style={styles.inputsView}>
-                <Image
-                    source={PwIcon}
-                    style={styles.icon}/>
-                <TextInput
-                    style={styles.input}
-                    textContentType='password'
-                    placeholder="Enter New Password"/>
-            </View>
-            <View style={{alignSelf:'center'}}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
-                        <View style={styles.buttonStyle}>
-                            <Text style={styles.buttonText}>Change Password</Text>
-                            </View>
-                </TouchableOpacity>
-            </View>
-            <Image source={QuesMarkIcon} style={styles.image}/>
-            <View style={{alignSelf:'center'}}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('ForgotPassword')}}>
-                    <Text style={styles.forgotText}>forgot password?</Text>
-                </TouchableOpacity>
-            </View>
+                <SafeAreaView style={styles.container}>
+                    <ScrollView style={styles.scrollView}>
+                        <Text style={styles.titleText}>Change Password</Text>
+                        <View style={styles.inputsView}>
+                            <Image
+                                source={PwIcon}
+                                style={styles.icon}/>
+                            <TextInput
+                                style={styles.input}
+                                textContentType='password'
+                                placeholder="Enter Current Password"/>
+                        </View>
+                        <View style={styles.inputsView}>
+                            <Image
+                                source={PwIcon}
+                                style={styles.icon}/>
+                            <TextInput
+                                style={styles.input}
+                                textContentType='password'
+                                placeholder="Enter New Password"/>
+                        </View>
+                        <View style={{alignSelf:'center'}}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
+                                    <View style={styles.buttonStyle}>
+                                        <Text style={styles.buttonText}>Change Password</Text>
+                                        </View>
+                            </TouchableOpacity>
+                        </View>
+                        <Image source={QuesMarkIcon} style={styles.image}/>
+                        <View style={{alignSelf:'center'}}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate('ForgotPassword')}}>
+                                <Text style={styles.forgotText}>forgot password?</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </SafeAreaView>
         </LinearGradient>
     )
 }
@@ -66,6 +70,9 @@ function ChangePassword() {
 const styles = StyleSheet.create({
     container:{
         flex:1,
+    },
+    scrollView:{
+        marginHorizontal: 20,
     },
     titleText:{
         alignSelf:'center',
