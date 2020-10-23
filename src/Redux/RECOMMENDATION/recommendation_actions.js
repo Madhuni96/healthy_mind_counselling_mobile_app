@@ -49,6 +49,25 @@ const clearState = () =>{
     }
 }
 
+export const get_all_recommendations = () =>{
+  return (dispatch)=>{
+    dispatch(fetchLoading())
+    Axios({
+      method: "GET",
+      url: "https://ecounselling-app-healthy-mind-server.azurewebsites.net/recommendation" ,
+      headers: { api_key: '123' },
+    })
+      .then((res) => {
+        const result = res.data;
+        dispatch(fetchAll(result));
+      })
+      .catch((err) => {
+        const error = err.response;
+        dispatch(fetchError(error));
+      });
+  }
+}
+
 export const get_recommendation_by_id_action = (recommendationId) => {
   return (dispatch) => {
     dispatch(fetchLoading());

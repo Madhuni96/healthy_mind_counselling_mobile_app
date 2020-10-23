@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { View, Animated, StyleSheet, ScrollView, SafeAreaView, Text, Image, ActivityIndicator } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { colYellowMain, colBlack, colYellowPink } from "../../Constants/Colors";
 import { WIDTH, STATUSBAR_HEIGHT } from "../../Constants/Sizes";
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AgeIcon, ImgIcon } from '../../Constants/Imports';
 import { useSelector, useDispatch } from 'react-redux'
+import ImagePicker from 'react-native-image-picker';
 import { get_user_action, user_profile_update_action } from '../../Redux';
 
 function ProfileModal({visibility, onClose, userId}) {
@@ -32,6 +34,7 @@ function ProfileModal({visibility, onClose, userId}) {
     const updateMethod = () => {
         if(email && nic && phone){
             dispatch(user_profile_update_action(userId,payload))
+            saveData()
             if(userMessage){
                 closeAnimation()
             }
@@ -144,6 +147,13 @@ function ProfileModal({visibility, onClose, userId}) {
         }
     }
 
+    const saveData = async () => {
+    await AsyncStorage.setItem('Madhu', JSON.stringify(imgData))
+      .then(console.log('Success'))
+      .catch((err) => {
+        console.log('Error: ', err);
+      });
+  };
     return (
         <Animated.View style={[styles.container, {
             opacity: modalOpacity

@@ -1,21 +1,26 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
+import { colYellowPink, colYellowMain, colBlack } from "../../Constants/Colors";
+import { WIDTH } from "../../Constants/Sizes";
 
-function RecommendationCom() {
-    return (
+function RecommendationCom({recommend,id}) {
+
+    let {recommendations} = recommend.find(item=>item._id === id)
+    console.log("object: ",recommendations)
+        return (
         <View style={styles.container}>
-            <Text>Rec</Text>
+                <Text>{recommendations}</Text>
+            
         </View>
     )
 }
 
 const styles = StyleSheet.create({
      container: {
-        width: WIDTH(100),
-        height: WIDTH(20),
-        marginVertical: WIDTH(1),
+        width: '100%',
+        height: '100%',
+        margin: WIDTH(1),
         backgroundColor: 'rgba(255,255,255,0.2)',
-        paddingHorizontal: WIDTH(2)
     },
 })
 

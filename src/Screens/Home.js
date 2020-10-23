@@ -8,13 +8,17 @@ import StatusBarCom from '../Components/Common/StatusBarCom';
 import LinearGradient from 'react-native-linear-gradient';
 import { ImgChat, ImgIcon, ImgQuiz } from '../Constants/Imports';
 import ProfileModal from '../Components/Modals/ProfileModal';
+import { useSelector, useDispatch } from 'react-redux'
+import { get_user_action } from '../Redux';
 
 function Home({ route }) {
 
     const { userId } = route.params;
-    console.log("Id:",userId)
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const user_state = useSelector(state => state.user);
+    const { userLoading, userError, userMessage, singleUser } = user_state;
 
     const [exitApp, setExitApp] = useState(false);
     const [profileModalVisibility, setProfileModalVisibility] = useState(null);
@@ -49,6 +53,12 @@ function Home({ route }) {
         return true;
     }
 
+    
+
+    useEffect(() => {
+        dispatch(get_user_action(userId));
+    }, []);
+
     useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", backHandler);
         return () => {
@@ -70,7 +80,7 @@ function Home({ route }) {
                 <View style={{alignSelf:'flex-end'}}>
                     <TouchableOpacity onPress={()=>onOpenProfileModal()}>
                         <Image source={ImgIcon} style={styles.ImageView}/>
-                        <Text style={styles.text}>Madhuni</Text>
+                        <Text style={styles.text}>{singleUser.username}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.contentView}>

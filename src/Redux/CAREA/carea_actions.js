@@ -49,6 +49,25 @@ const clearState = () =>{
     }
 }
 
+export const get_all_careas_action = () => {
+  return (dispatch) => {
+    dispatch(fetchLoading());
+    Axios({
+      method: "GET",
+      url: "https://ecounselling-app-healthy-mind-server.azurewebsites.net/carea",
+      headers: { api_key: '123' },
+    })
+      .then((res) => {
+        const result = res.data;
+        dispatch(fetchAll(result));
+      })
+      .catch((err) => {
+        const error = err.response;
+        dispatch(fetchError(error));
+      });
+  };
+};
+
 export const get_carea_by_id_action = (careaId) => {
   return (dispatch) => {
     dispatch(fetchLoading());

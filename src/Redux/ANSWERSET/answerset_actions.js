@@ -49,6 +49,27 @@ const clearState = () =>{
     }
 }
 
+export const get_all_answers = () =>{
+  return (dispatch)=>{
+    dispatch(fetchLoading())
+    Axios({
+      method: "GET",
+      url: "https://ecounselling-app-healthy-mind-server.azurewebsites.net/answerset" ,
+      headers: { api_key: '123' },
+    })
+      .then((res) => {
+        const result = res.data;
+        console.log("Answers: ",result)
+        dispatch(fetchAll(result));
+      })
+      .catch((err) => {
+        const error = err.response;
+        console.log("Error: ",err)
+        dispatch(fetchError(error));
+      });
+  }
+}
+
 export const get_answerset_by_id_action = (answersetId) => {
   return (dispatch) => {
     dispatch(fetchLoading());
