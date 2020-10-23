@@ -9,7 +9,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import { ImgChat, ImgIcon, ImgQuiz } from '../Constants/Imports';
 import ProfileModal from '../Components/Modals/ProfileModal';
 
-function Home() {
+function Home({ route }) {
+
+    const { userId } = route.params;
+    console.log("Id:",userId)
 
     const navigation = useNavigation();
 
@@ -72,7 +75,7 @@ function Home() {
                 </View>
                 <View style={styles.contentView}>
                     <View style={styles.imgView}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('Quiz')}>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Quiz',{userId:userId})}>
                             <Image source={ImgQuiz} style={styles.image}/>
                         </TouchableOpacity>
                     </View>
@@ -81,7 +84,8 @@ function Home() {
             </View>
             <ProfileModal
                 visibility={profileModalVisibility}
-                onClose={onCloseProfileModal}/>
+                onClose={onCloseProfileModal}
+                userId={userId}/>
         </LinearGradient>
     )
 }

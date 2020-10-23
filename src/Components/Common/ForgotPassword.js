@@ -1,15 +1,62 @@
-import React from 'react'
-import { SafeAreaView, ScrollView, View, StyleSheet, Text, Image } from 'react-native'
+import React, { useState,useEffect } from 'react'
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, Image, ActivityIndicator } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import StatusBarCom from '../Common/StatusBarCom';
-import { PwIcon} from '../../Constants/Imports';
 import { WIDTH } from '../../Constants/Sizes';
 import { colYellowMain, colBlack, colBlue } from "../../Constants/Colors";
+import { useSelector, useDispatch } from 'react-redux'
+import { get_verification_code_action, forgot_password_action } from '../../Redux';
 
 function ForgotPassword() {
+
+    const [email,setEmail] = useState('');
+    const [username,setUsername] = useState('');
+    const [verificationcode,setVerificationCode] = useState('');
+    const [newpassword,setNewpassword] = useState('');
+    const [confirmpassword, setConfirmpassword] = useState('');
+
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const user_state = useSelector(state => state.user);
+    const { userLoading, userError, userMessage, singleUser } = user_state;
+
+    const getVerificationCode = () => {
+        if(email){
+            dispatch(get_verification_code_action(email))
+            if(userError){
+                alert(userError.data)
+            }
+        }else if(email === ''){
+            alert("Email field is empty!")
+        }
+    }
+
+    const payload = {
+        username:username,
+        verificationCode:verificationcode,
+        newPassword:newpassword,
+        confirmPassword:confirmpassword
+    }
+
+    const forgotPasswordMethod = () =>{
+        if(verificationcode && newpassword && confirmpassword){
+            dispatch(forgot_password_action(payload))
+            if(userMessage){
+                navigation.navigate('SignIn')
+            }
+            if(userError){
+                alert(userError.data)
+            }
+        }else if(verificationcode === ''){
+            alert("Verification Code field is empty!")
+        }else if(newpassword === ''){
+            alert("New Password field is empty!")
+        }else if(confirmpassword === ''){
+            alert("Confirm Password field is empty!")
+        }
+    }
 
     return (
         <LinearGradient
@@ -21,8 +68,19 @@ function ForgotPassword() {
                 <SafeAreaView style={styles.container}>
                     <ScrollView style={styles.scrollView}>
                         <Text style={styles.titleText}>Forgot Password</Text>
+                        <TextInput
+                            style={styles.input}
+                            textContentType='username'
+                            onChangeText={(text)=>setUsername(text)}
+                            placeholder="Enter Username"/>
+                        <TextInput
+                            style={styles.input}
+                            textContentType='emailAddress'
+                            onChangeText={(text)=>setEmail(text)}
+                            keyboardType='email-address'
+                            placeholder="Enter Email"/>
                         <View style={{alignSelf:'center'}}>
-                            <TouchableOpacity onPress={()=>{navigation.goBack()}}>
+                            <TouchableOpacity onPress={()=>{getVerificationCode()}}>
                                     <View style={styles.buttonStyle}>
                                         <Text style={styles.buttonText}>Send Verification Code</Text>
                                         </View>
@@ -30,22 +88,30 @@ function ForgotPassword() {
                         </View>
                         <TextInput
                             style={styles.input}
+                            onChangeText={(text)=>setVerificationCode(text)}
                             placeholder="Enter Verification Code"/>
                         <TextInput
                             style={styles.input}
                             textContentType='password'
+                            secureTextEntry={true}
+                            onChangeText={(text)=>setNewpassword(text)}
                             placeholder="Enter New Password"/>
                         <TextInput
                             style={styles.input}
                             textContentType='password'
+                            secureTextEntry={true}
+                            onChangeText={(text)=>setConfirmpassword(text)}
                             placeholder="Enter Confirm Password"/>
                         <View style={{alignSelf:'center'}}>
-                            <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
+                            <TouchableOpacity onPress={()=>{forgotPasswordMethod()}}>
                                     <View style={styles.buttonStyle}>
                                         <Text style={styles.buttonText}>Change Password</Text>
                                         </View>
                             </TouchableOpacity>
                         </View>
+                        {userLoading &&
+                            <ActivityIndicator size="small" color="#000000"/>
+                        }
                     </ScrollView>
                 </SafeAreaView>
                 
@@ -72,7 +138,7 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     input: {
-        margin:WIDTH(5),
+        margin:WIDTH(2),
         alignSelf: 'center',
         width: '70%',
         borderBottomWidth: WIDTH(0.2),

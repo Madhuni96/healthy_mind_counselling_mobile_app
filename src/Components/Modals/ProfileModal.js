@@ -1,17 +1,51 @@
 import React, { useState, useEffect } from 'react'
-import { View, Animated, StyleSheet, ScrollView, SafeAreaView, Text, Image } from 'react-native'
+import { View, Animated, StyleSheet, ScrollView, SafeAreaView, Text, Image, ActivityIndicator } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { colYellowMain, colBlack, colYellowPink } from "../../Constants/Colors";
 import { WIDTH, STATUSBAR_HEIGHT } from "../../Constants/Sizes";
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { EmailIcon, AgeIcon, NicIcon, PhoneIcon, ImgIcon, CameraIcon, GalleryIcon } from '../../Constants/Imports';
-import ChangePassword from '../Common/ChangePassword';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { AgeIcon, ImgIcon } from '../../Constants/Imports';
+import { useSelector, useDispatch } from 'react-redux'
+import { get_user_action, user_profile_update_action } from '../../Redux';
 
-function ProfileModal({visibility, onClose}) {
+function ProfileModal({visibility, onClose, userId}) {
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const user_state = useSelector(state => state.user);
+    const { userLoading, userError, userMessage, singleUser } = user_state;
     const [modalOpacity] = useState(new Animated.Value(0));
-    const [imgData,setImgData] = useState('')
+    const [imgData,setImgData] = useState('');
+    const [email,setEmail] = useState('');
+    const [nic,setNic] = useState('');
+    const [phone,setPhone] = useState('');
+    const [state] = useState('Online');
+
+    const payload = {
+        email:email,
+        nic:nic,
+        phone:phone,
+        state:state
+    }
+
+    const updateMethod = () => {
+        if(email && nic && phone){
+            dispatch(user_profile_update_action(userId,payload))
+            if(userMessage){
+                closeAnimation()
+            }
+            if(userError){
+                alert(userError.data)
+            }
+        }else if(email === ''){
+            alert("Email field is empty!")
+        }else if(nic === ''){
+            alert("NIC field is empty!")
+        }else if(phone === ''){
+            alert("Phone field is empty!")
+        }
+    }
 
     const openAnimation = () => {
         Animated.timing(
@@ -34,6 +68,10 @@ function ProfileModal({visibility, onClose}) {
             }
         ).start(() => onClose())
     }
+
+    useEffect(() => {
+        dispatch(get_user_action(userId));
+    }, []);
 
     useEffect(() => {
             if (visibility) {
@@ -124,61 +162,57 @@ function ProfileModal({visibility, onClose}) {
                                 <TouchableOpacity
                                     onPress={()=>launchCamera()}
                                     >
-                                    <Image source={CameraIcon} style={styles.icon}/>
+                                    <Icon name="camera" size={30} color="#000000" style={styles.icon}/>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={()=>launchImageLibrary()}
                                     >
-                                    <Image source={GalleryIcon} style={styles.icon}/>
+                                    <Icon name="image" size={30} color="#000000" style={styles.icon}/>
                                 </TouchableOpacity>
-                            </View>
-                            
-                                <Text style={styles.text}>Username</Text>
-                                <Text style={styles.text}>Gender</Text>
-                                <Text style={styles.text}>Type</Text>
-                          
+                            </View>                           
+                                <Text style={styles.text}>{singleUser.username}</Text>
+                                <Text style={styles.text}>{singleUser.age}</Text>
+                                <Text style={styles.text}>{singleUser.gender}</Text>
+                                <Text style={styles.text}>{singleUser.type}</Text>
                             <View style={styles.inputsView}>
-                                <Image
-                                    source={EmailIcon}
-                                    style={styles.icon}/>
+                                <Icon name="at" size={30} color="#000000" style={styles.icon}/>
                                 <TextInput
                                     style={styles.input}
                                     textContentType='emailAddress'
                                     keyboardType='email-address'
-                                    placeholder="Enter Email"/>
+                                    defaultValue={singleUser.email}
+                                    placeholder="Enter Email"
+                                    clearTextOnFocus={true}
+                                    onChangeText={(text) => setEmail(text)}/>
                             </View>
                             <View style={styles.inputsView}>
-                                <Image
-                                    source={AgeIcon}
-                                    style={styles.icon}/>
+                                <Icon name="id-card" size={30} color="#000000" style={styles.icon}/>
                                 <TextInput
                                     style={styles.input}
-                                    keyboardType='numeric'
-                                    placeholder="Enter Age"/>
+                                    defaultValue={singleUser.nic}
+                                    placeholder="Enter NIC"
+                                    onChangeText={(text) => setNic(text)}/>
                             </View>
                             <View style={styles.inputsView}>
-                                <Image
-                                    source={NicIcon}
-                                    style={styles.icon}/>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Enter NIC"/>
-                            </View>
-                            <View style={styles.inputsView}>
-                                <Image
-                                    source={PhoneIcon}
-                                    style={styles.icon}/>
+                                <Icon name="phone" size={30} color="#000000" style={styles.icon}/>
                                 <TextInput
                                     style={styles.input}
                                     keyboardType='phone-pad'
+                                    defaultValue={singleUser.phone}
                                     textContentType='telephoneNumber'
-                                    placeholder="Enter Phone No."/>
+                                    placeholder="Enter Phone No."
+                                    onChangeText={(text) => setPhone(text)}/>
                             </View>
                             <View style={{alignSelf:'center'}}>
-                                <TouchableOpacity onPress={()=>{navigation.navigate('ChangePassword')}}>
+                                <TouchableOpacity onPress={()=>{navigation.navigate('ChangePassword',{userId:userId})}}>
                                             <Text style={styles.pwText}>Change Password</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
+                                {userLoading && (
+                                    <View>
+                                        <ActivityIndicator size="small" color="#000000"/>
+                                    </View>
+                                )}
+                                <TouchableOpacity onPress={()=>{updateMethod()}}>
                                         <View style={styles.buttonStyle}>
                                             <Text style={styles.buttonText}>Update</Text>
                                             </View>
@@ -272,8 +306,12 @@ const styles = StyleSheet.create({
         fontSize: WIDTH(4.5)
     },
     icon: {
-        width: WIDTH(7),
-        height: WIDTH(7),
+        marginTop:WIDTH(3),
+        marginRight:WIDTH(3)
+    },
+    icon1: {
+        width: WIDTH(8),
+        height: WIDTH(8),
         marginTop:WIDTH(3),
         marginRight:WIDTH(3)
     },

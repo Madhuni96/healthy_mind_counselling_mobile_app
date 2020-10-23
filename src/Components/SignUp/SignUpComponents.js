@@ -1,21 +1,32 @@
 import React,{useState} from 'react'
-import { View, StyleSheet, Image, Text,SafeAreaView, ScrollView } from 'react-native'
+import { View, StyleSheet, Image, Text,SafeAreaView, ScrollView, ActivityIndicator } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import RadioForm from 'react-native-simple-radio-button';
 import ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import { UserIcon, PwIcon, EmailIcon, AgeIcon, NicIcon, PhoneIcon, ImgIcon, CameraIcon, GalleryIcon } from '../../Constants/Imports';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { AgeIcon, ImgIcon } from '../../Constants/Imports';
 import { colBlack, colYellowMain } from '../../Constants/Colors'
 import { WIDTH } from "../../Constants/Sizes";
+import { save_user_action } from '../../Redux';
+import { useSelector, useDispatch } from 'react-redux'
 
 function SignUpComponents() {
 
-    const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const user_state = useSelector(state => state.user)
+    const { userLoading, userError, userMessage } = user_state;
 
+    const [username,setUsername] = useState('')
+    const [email,setEmail] = useState('')
+    const [age,setAge] = useState('')
+    const [nic,setNic] = useState('')
+    const [phone,setPhone] = useState('')
     const [gender,setGender] = useState('Male');
     const [type,setType] = useState('Patient');
     const [imgData,setImgData] = useState('')
+    const [password,setPassword] = useState('')
+    const [confirmpassword,setConfirmpassword] = useState('')
 
     var radio_gender = [
         {label:'Male',value:0},
@@ -85,7 +96,7 @@ function SignUpComponents() {
     });
   };
 
-  const renderImage = () =>{
+  const renderImage = () => {
     if (imgData) {
       return (
         <Image
@@ -97,6 +108,43 @@ function SignUpComponents() {
       return (
         <Image source={ImgIcon} style={styles.images} />
       );
+    }
+  }
+
+  const payload = {
+    age: age,
+    email: email,
+    gender: gender,
+    nic: nic,
+    password: password,
+    phone: phone,
+    state: "Offline",
+    type: type,
+    username: username
+  }
+
+  const signupMethod = () => {
+    if(username && email && age && nic && phone && password && confirmpassword){
+        dispatch(save_user_action(payload))
+        if(userError){
+            alert(userError.data)
+        }
+    }else if(username === ''){
+        alert("Username field is empty!")
+    }else if(email === ''){
+        alert("Email field is empty!")
+    }else if(age === ''){
+        alert("Age field is empty!")
+    }else if(nic === ''){
+        alert("NIC field is empty!")
+    }else if(phone === ''){
+        alert("Phone field is empty!")
+    }else if(password === ''){
+        alert("Password field is empty!")
+    }else if(confirmpassword === ''){
+        alert("Password field is empty!")
+    }else if(confirmpassword === password){
+        alert("Password and Confirm Password is not matched!")
     }
   }
 
@@ -113,58 +161,55 @@ function SignUpComponents() {
               <TouchableOpacity
                 onPress={()=>launchCamera()}
                 >
-                <Image source={CameraIcon} style={styles.icon}/>
+                <Icon name="camera" size={30} color="#000000" style={styles.icon}/>
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={()=>launchImageLibrary()}
                 >
-                <Image source={GalleryIcon} style={styles.icon}/>
+                <Icon name="image" size={30} color="#000000" style={styles.icon}/>
               </TouchableOpacity>
               </View>
             <View style={styles.inputsView}>
-                <Image
-                    source={UserIcon}
-                    style={styles.icon}/>
+                <Icon name="user" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
                     textContentType='username'
+                    onChangeText={(text) => setUsername(text)}
                     placeholder="Enter User Name"/>
             </View>
             <View style={styles.inputsView}>
-                <Image
-                    source={EmailIcon}
-                    style={styles.icon}/>
+                <Icon name="at" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
                     textContentType='emailAddress'
+                    onChangeText={(text) => setEmail(text)}
                     keyboardType='email-address'
                     placeholder="Enter Email"/>
             </View>
             <View style={styles.inputsView}>
                 <Image
                     source={AgeIcon}
-                    style={styles.icon}/>
+                    style={styles.icon1}/>
                 <TextInput
                     style={styles.input}
                     keyboardType='numeric'
+                    onChangeText={(text) => setAge(text)}
                     placeholder="Enter Age"/>
             </View>
             <View style={styles.inputsView}>
-                <Image
-                    source={NicIcon}
-                    style={styles.icon}/>
+                <Icon name="id-card" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
+                    onChangeText={(text) => setNic(text)}
                     placeholder="Enter NIC"/>
             </View>
             <View style={styles.inputsView}>
-                <Image
-                    source={PhoneIcon}
-                    style={styles.icon}/>
+                <Icon name="phone" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
                     keyboardType='phone-pad'
+                    onChangeText={(text) => setPhone(text)}
                     textContentType='telephoneNumber'
                     placeholder="Enter Phone No."/>
             </View>
@@ -203,25 +248,30 @@ function SignUpComponents() {
                 </View>
             </View>
             <View style={styles.inputsView}>
-                <Image
-                    source={PwIcon}
-                    style={styles.icon}/>
+                <Icon name="lock" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
+                    secureTextEntry={true}
                     textContentType='password'
+                    onChangeText={(text) => setPassword(text)}
                     placeholder="Enter Password"/>
             </View>
             <View style={styles.inputsView}>
-                <Image
-                    source={PwIcon}
-                    style={styles.icon}/>
+                <Icon name="lock" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
+                    secureTextEntry={true}
                     textContentType='password'
+                    onChangeText={(text) => setConfirmpassword(text)}
                     placeholder="Enter Confirm Password"/>
             </View>
+            {userLoading && (
+                <View>
+                    <ActivityIndicator size="small" color="#000000"/>
+                </View>
+            )}
             <View style={{alignSelf:'center'}}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
+                <TouchableOpacity onPress={()=>{signupMethod()}}>
                         <View style={styles.buttonStyle}>
                             <Text style={styles.buttonText}>Sign Up</Text>
                             </View>
@@ -257,8 +307,12 @@ const styles = StyleSheet.create({
         fontSize: WIDTH(4.5)
     },
     icon: {
-        width: WIDTH(7),
-        height: WIDTH(7),
+        marginTop:WIDTH(3),
+        marginRight:WIDTH(3)
+    },
+    icon1: {
+        width: WIDTH(8),
+        height: WIDTH(8),
         marginTop:WIDTH(3),
         marginRight:WIDTH(3)
     },

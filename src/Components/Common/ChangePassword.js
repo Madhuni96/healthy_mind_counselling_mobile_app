@@ -1,17 +1,51 @@
-import React from 'react'
-import { View, StyleSheet, Alert, Text, Image, SafeAreaView, ScrollView } from 'react-native'
+import React, { useState, useEffect} from 'react'
+import { View, StyleSheet, Alert, Text, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import StatusBarCom from '../Common/StatusBarCom';
-import { PwIcon, QuesMarkIcon } from '../../Constants/Imports';
+import { QuesMarkIcon } from '../../Constants/Imports';
 import { WIDTH } from '../../Constants/Sizes';
 import { colYellowMain, colBlack, colBlue } from "../../Constants/Colors";
 import useBackButton from '../Common/useBackButton'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { useSelector, useDispatch } from 'react-redux'
+import { change_password_action } from '../../Redux';
 
-function ChangePassword() {
+function ChangePassword({route}) {
+
+    const { userId } = route.params;
+
+    const [password,setPassword] = useState('')
+    const [newpassword,setNewpassword] = useState('')
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const user_state = useSelector(state => state.user);
+    const { userLoading, userError, userMessage, singleUser } = user_state;
+
+    const payload = {
+        password:password,
+        newPassword:newpassword
+    }
+
+    const changePasswordMethod = () => {
+        if(password && newpassword){
+            dispatch(change_password_action(userId,payload))
+            if(userMessage){
+                navigation.navigate('Home')
+            }
+            if(userError){
+                alert(userError.data)
+            }
+        }else if(password === ''){
+            alert("Current Password field is empty!")
+        }else if(newpassword === ''){
+            alert("New Password field is empty!")
+        }else if(newpassword === password){
+            alert("Current Password and New Password is not matched!")
+    }
+    }
 
     const backHandler = () =>{
         navigation.navigate('Home')
@@ -31,25 +65,30 @@ function ChangePassword() {
                     <ScrollView style={styles.scrollView}>
                         <Text style={styles.titleText}>Change Password</Text>
                         <View style={styles.inputsView}>
-                            <Image
-                                source={PwIcon}
-                                style={styles.icon}/>
+                            <Icon name="lock" size={30} color="#000000" style={styles.icon}/>
                             <TextInput
                                 style={styles.input}
+                                secureTextEntry={true}
                                 textContentType='password'
+                                onChangeText={(text) => setPassword(text)}
                                 placeholder="Enter Current Password"/>
                         </View>
                         <View style={styles.inputsView}>
-                            <Image
-                                source={PwIcon}
-                                style={styles.icon}/>
+                            <Icon name="lock" size={30} color="#000000" style={styles.icon}/>
                             <TextInput
                                 style={styles.input}
+                                secureTextEntry={true}
                                 textContentType='password'
+                                onChangeText={(text) => setNewpassword(text)}
                                 placeholder="Enter New Password"/>
                         </View>
+                        {userLoading && (
+                            <View>
+                                <ActivityIndicator size="small" color="#000000"/>
+                            </View>
+                        )}
                         <View style={{alignSelf:'center'}}>
-                            <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
+                            <TouchableOpacity onPress={()=>{changePasswordMethod()}}>
                                     <View style={styles.buttonStyle}>
                                         <Text style={styles.buttonText}>Change Password</Text>
                                         </View>
@@ -93,8 +132,6 @@ const styles = StyleSheet.create({
         fontSize: WIDTH(4.5)
     },
     icon: {
-        width: WIDTH(7),
-        height: WIDTH(7),
         marginTop:WIDTH(3),
         marginRight:WIDTH(3)
     },

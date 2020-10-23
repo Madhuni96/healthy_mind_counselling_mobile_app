@@ -1,33 +1,59 @@
-import React from 'react'
-import { View, StyleSheet, Image, Text } from 'react-native'
+import React, { useState } from 'react'
+import { View, StyleSheet, Image, Text, ActivityIndicator } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import { UserIcon, PwIcon } from '../../Constants/Imports';
 import { colBlack, colBlue, colYellowMain } from '../../Constants/Colors'
 import { WIDTH } from "../../Constants/Sizes";
+import { useSelector, useDispatch } from 'react-redux'
+import { signin_action } from '../../Redux';
 
 function SignInComponents() {
 
+const [username,setUsername] = useState('')
+const [password,setPassword] = useState('')
+
 const navigation = useNavigation();
+const dispatch = useDispatch();
+const signin_state = useSelector(state => state.user)
+const { userLoading, userError, userMessage } = signin_state;
+
+const payload = {
+    username:username,
+    password:password
+}
+
+const signinMethod = () =>{
+    
+    if(username && password){
+        dispatch(signin_action(payload))
+        if(userError){
+            alert(userError.data)
+        }
+    }else if(username === ''){
+        alert("Username is empty!")
+    }else if(password === ''){
+        alert("Password is empty!")
+    } 
+}
 
     return (
         <View style={styles.container}>
             <View style={styles.inputsView}>
-                <Image
-                    source={UserIcon}
-                    style={styles.icon}/>
+                <Icon name="user" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
                     textContentType='username'
+                    onChangeText={(text) => setUsername(text)}
                     placeholder="Enter User Name"/>
             </View>
             <View style={styles.inputsView}>
-                <Image
-                    source={PwIcon}
-                    style={styles.icon}/>
+                <Icon name="lock" size={30} color="#000000" style={styles.icon}/>
                 <TextInput
                     style={styles.input}
+                    secureTextEntry={true}
                     textContentType='password'
+                    onChangeText={(text) => setPassword(text)}
                     placeholder="Enter Password"/>
             </View>
             <View style={{alignSelf:'flex-end'}}>
@@ -37,12 +63,17 @@ const navigation = useNavigation();
             </View>
                 
             <View style={{alignSelf:'center'}}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Home')}}>
+                <TouchableOpacity onPress={()=>{signinMethod()}}>
                         <View style={styles.buttonStyle}>
                             <Text style={styles.buttonText}>SignIn</Text>
                             </View>
                 </TouchableOpacity>
             </View>
+            {userLoading && (
+                <View>
+                    <ActivityIndicator size="small" color="#000000"/>
+                </View>
+            )}
             <View style={{alignSelf:'center'}}>
                 <TouchableOpacity onPress={()=>{navigation.navigate('SignUp')}}>
                     <Text style={styles.newAccText}>Create a new account</Text>
@@ -69,8 +100,6 @@ const styles = StyleSheet.create({
         fontSize: WIDTH(4.5)
     },
     icon: {
-        width: WIDTH(7),
-        height: WIDTH(7),
         marginTop:WIDTH(3),
         marginRight:WIDTH(3)
     },

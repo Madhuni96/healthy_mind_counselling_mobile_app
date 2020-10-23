@@ -1,3 +1,8 @@
-export const USER_FETCH_SUCCESS = 'USER_FETCH_SUCCESS';
-export const USER_FETCH_LOADING = 'USER_FETCH_LOADING';
-export const USER_FETCH_ERROR = 'USER_FETCH_ERROR';
+import { combineReducers } from 'redux';
+import user_reducer from './USER/user_reducer';
+
+const root_reducer = combineReducers({
+    user: user_reducer
+})
+
+export default root_reducer
